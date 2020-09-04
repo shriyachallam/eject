@@ -3,17 +3,17 @@ import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View } from 'rea
 import styles from './styles';
 import { firebase } from '../../firebase/config'
 
-export default function HomeScreen(props) {
+export default function HomeScreen({navigation}) {
 
     const [entityText, setEntityText] = useState('')
     const [entities, setEntities] = useState([])
 
     const entityRef = firebase.firestore().collection('entities')
-    const userID = props.extraData.id
-
-    useEffect(() => {
-        entityRef
-            .where("authorID", "==", userID)
+    
+    firebase.auth().onAuthStateChanged(function(user){
+        if(user){
+            entityRef
+            .where("authorID", "==", user.uid)
             .orderBy('createdAt', 'desc')
             .onSnapshot(
                 querySnapshot => {
@@ -29,7 +29,10 @@ export default function HomeScreen(props) {
                     console.log(error)
                 }
             )
-    }, [])
+        }else{
+
+        }
+    })
 
     const onAddButtonPress = () => {
         if (entityText && entityText.length > 0) {
@@ -61,6 +64,11 @@ export default function HomeScreen(props) {
         )
     }
 
+    const handleSignout = () => {
+        firebase.auth().signOut()
+        navigation.navigate('Login')
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.formContainer}>
@@ -77,6 +85,7 @@ export default function HomeScreen(props) {
                     <Text style={styles.buttonText}>Add</Text>
                 </TouchableOpacity>
             </View>
+            <Text onPress={handleSignout}>Log Out</Text>
             { entities && (
                 <View style={styles.listContainer}>
                     <FlatList
