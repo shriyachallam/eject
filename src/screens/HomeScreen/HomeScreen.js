@@ -74,7 +74,7 @@ export default function HomeScreen({navigation}) {
             <View style={styles.formContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder='Add new entity'
+                    placeholder='Add your hobbies!'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setEntityText(text)}
                     value={entityText}
@@ -85,7 +85,6 @@ export default function HomeScreen({navigation}) {
                     <Text style={styles.buttonText}>Add</Text>
                 </TouchableOpacity>
             </View>
-            <Text onPress={handleSignout}>Log Out</Text>
             { entities && (
                 <View style={styles.listContainer}>
                     <FlatList

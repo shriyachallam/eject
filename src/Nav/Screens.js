@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MessageScreen from '../screens/MessageScreen/MessageScreen'
 import NotificationScreen from '../screens/NotificationScreen/NotificationScreen'
 import PostScreen from '../screens/PostScreen/PostScreen'
-import ProfileScreen from '../screens/ProfileScreen/ProfileScreen'
 import HomeScreen from '../screens/HomeScreen/HomeScreen'
 
 function MyTabBar({ state, descriptors, navigation }) {
@@ -65,11 +64,10 @@ const Tab = createBottomTabNavigator();
 export default function Screens(user) {
   return (
       <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
-        <Tab.Screen name="Message" component={MessageScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Post" component={PostScreen} />
-        <Tab.Screen name="Notification" component={NotificationScreen} />
-        <Tab.Screen name="Home" component={props => <HomeScreen {...props} extraData={user} /> }/>
+        <Tab.Screen name="Home" component={MessageScreen} />
+        <Tab.Screen name="Profile" component={PostScreen} />
+        <Tab.Screen name="Timer" component={NotificationScreen} />
+        <Tab.Screen name="Hobbies" component={props => <HomeScreen {...props} extraData={user} /> }/>
       </Tab.Navigator>
   );
 }
