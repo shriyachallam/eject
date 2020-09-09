@@ -9,7 +9,7 @@ export default function HomeScreen({navigation}) {
     const [entities, setEntities] = useState([])
 
     const entityRef = firebase.firestore().collection('entities')
-
+    var user_id = ''
     firebase.auth().onAuthStateChanged(function(user){
         if(user){
             entityRef
@@ -18,7 +18,6 @@ export default function HomeScreen({navigation}) {
             .onSnapshot(
                 querySnapshot => {
                     const newEntities = []
-                    console.log(user.uid)
                     querySnapshot.forEach(doc => {
                         const entity = doc.data()
                         entity.id = doc.id
@@ -30,16 +29,20 @@ export default function HomeScreen({navigation}) {
                     console.log(error)
                 }
             )
+            user_id = user.uid
+
         }else{
+            user_id = ''
 
         }
     })
+    
     const onAddButtonPress = () => {
         if (entityText && entityText.length > 0) {
             const timestamp = firebase.firestore.FieldValue.serverTimestamp();
             const data = {
                 text: entityText,
-                authorID: userID,
+                authorID: user_id,
                 createdAt: timestamp,
             };
             entityRef

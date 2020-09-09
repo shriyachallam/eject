@@ -1,18 +1,44 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Dimensions } from 'react-native'
+import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Dimensions, ListView } from 'react-native'
 import styles from './styles';
 import { firebase } from '../../firebase/config'
 import {
     LineChart,
   } from "react-native-chart-kit";
 
+
+
+async function getData(user_id) {
+
+    var data = [];
+    var time = [];
+  
+    var snapshot = await firebase.firestore()
+      .collection('data')
+      .orderBy('createdAt')
+      .get()
+  
+    snapshot.forEach((doc) => {
+      const datapoint = doc.data();
+      datapoint.id = doc.id;
+      if (user_id == datapoint.authorID) {
+        data.push(datapoint.text);
+        time.push(datapoint.date);
+      }
+    })  ;
+    alert(time)
+    alert(data)
+  }
+
+
 export default function MessageScreen({navigation}) {
 
     const [entityText, setEntityText] = useState('')
     const [entities, setEntities] = useState([])
-
+    const months = ['Jan', 'Feb', 'Mar', 'Apr']
+    const amount = [3, 7, 8, 9]
     const entityRef = firebase.firestore().collection('data')
-    
+    var user_id = ''
     firebase.auth().onAuthStateChanged(function(user){
         if(user){
             entityRef
@@ -23,6 +49,7 @@ export default function MessageScreen({navigation}) {
                     const newEntities = []
                     querySnapshot.forEach(doc => {
                         const entity = doc.data()
+                        alert(doc.id)
                         entity.id = doc.id
                         newEntities.push(entity)
                     });
@@ -32,7 +59,10 @@ export default function MessageScreen({navigation}) {
                     console.log(error)
                 }
             )
+            user_id = user.uid
+            getData(user_id)
         }else{
+            user_id = ''
 
         }
     })
@@ -40,10 +70,14 @@ export default function MessageScreen({navigation}) {
     const onAddButtonPress = () => {
         if (entityText && entityText.length > 0) {
             const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+            var date = new Date().getDate();
+            var month = new Date().getMonth();
+            var full_date = date + '/' + month
             const data = {
-                text: entityText,
-                authorID: userID,
+                text: Number(entityText),
+                authorID: user_id,
                 createdAt: timestamp,
+                date: full_date,
             };
             entityRef
                 .add(data)
@@ -55,17 +89,7 @@ export default function MessageScreen({navigation}) {
                     alert(error)
                 });
         }
-    }
-
-    const renderEntity = ({item, index}) => {
-        return (
-            <View style={styles.entityContainer}>
-                <Text style={styles.entityText}>
-                    {index}. {item.text}
-                </Text>
-            </View>
-        )
-    }
+    }  
 
     return (
         <View style={styles.container}>
@@ -83,49 +107,25 @@ export default function MessageScreen({navigation}) {
                     <Text style={styles.buttonText}>Add</Text>
                 </TouchableOpacity>
             </View>
-            <LineChart
-    data={{
-      labels: ["January", "February", "March", "April", "May", "June"],
-      datasets: [
-        {
-          data: [
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100
-          ]
-        }
-      ]
-    }}
-    width={Dimensions.get("window").width} // from react-native
-    height={220}
-    yAxisLabel="$"
-    yAxisSuffix="k"
-    yAxisInterval={1} // optional, defaults to 1
-    chartConfig={{
-      backgroundColor: "#e26a00",
-      backgroundGradientFrom: "#fb8c00",
-      backgroundGradientTo: "#ffa726",
-      decimalPlaces: 2, // optional, defaults to 2dp
-      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-      labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-      style: {
-        borderRadius: 16
-      },
-      propsForDots: {
-        r: "6",
-        strokeWidth: "2",
-        stroke: "#ffa726"
-      }
-    }}
-    bezier
-    style={{
-      marginVertical: 8,
-      borderRadius: 16
-    }}
-  />
+            <View>
+                <LineChart
+                    data={{
+                    labels: months,
+                    datasets: [
+                        {
+                            data: amount
+                        }
+                    ]
+                    }}
+                    width={Dimensions.get("window").width} // from react-native
+                    height={220}
+                    chartConfig={{
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    }}
+                    bezier
+                />
+            </View>
         </View>
+            
     )
 }
