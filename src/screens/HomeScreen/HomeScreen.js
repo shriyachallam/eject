@@ -9,7 +9,7 @@ export default function HomeScreen({navigation}) {
     const [entities, setEntities] = useState([])
 
     const entityRef = firebase.firestore().collection('entities')
-    
+
     firebase.auth().onAuthStateChanged(function(user){
         if(user){
             entityRef
@@ -18,6 +18,7 @@ export default function HomeScreen({navigation}) {
             .onSnapshot(
                 querySnapshot => {
                     const newEntities = []
+                    console.log(user.uid)
                     querySnapshot.forEach(doc => {
                         const entity = doc.data()
                         entity.id = doc.id
@@ -33,7 +34,6 @@ export default function HomeScreen({navigation}) {
 
         }
     })
-
     const onAddButtonPress = () => {
         if (entityText && entityText.length > 0) {
             const timestamp = firebase.firestore.FieldValue.serverTimestamp();
@@ -64,17 +64,12 @@ export default function HomeScreen({navigation}) {
         )
     }
 
-    const handleSignout = () => {
-        firebase.auth().signOut()
-        navigation.navigate('Login')
-    }
-
     return (
         <View style={styles.container}>
             <View style={styles.formContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder='Add your hobbies!'
+                    placeholder='Add new entity'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setEntityText(text)}
                     value={entityText}
