@@ -47,7 +47,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         { user ? (
-          <Stack.Screen name="Home">
+          <Stack.Screen name="E-Ject">
             {props => <Screens {...props} extraData={user} />}
           </Stack.Screen>
         ) : (

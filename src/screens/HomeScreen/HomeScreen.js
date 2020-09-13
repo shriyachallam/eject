@@ -61,7 +61,7 @@ export default function HomeScreen({navigation}) {
         return (
             <View style={styles.entityContainer}>
                 <Text style={styles.entityText}>
-                    {index}. {item.text}
+                    {(index + 1)}. {item.text}
                 </Text>
             </View>
         )
@@ -69,15 +69,13 @@ export default function HomeScreen({navigation}) {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.instructions}>Hobbies</Text> 
             <View style={styles.formContainer}>
                 <TextInput
                     style={styles.input}
                     placeholder='Add new entity'
-                    placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => setEntityText(text)}
                     value={entityText}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
                 />
                 <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
                     <Text style={styles.buttonText}>Add</Text>

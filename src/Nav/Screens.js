@@ -64,8 +64,8 @@ const Tab = createBottomTabNavigator();
 export default function Screens(user) {
   return (
       <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
-        <Tab.Screen name="Home" component={props => <MessageScreen {...props} extraData={user} /> }/>
         <Tab.Screen name="Profile" component={PostScreen} />
+        <Tab.Screen name="Home" component={props => <MessageScreen {...props} extraData={user} /> }/>
         <Tab.Screen name="Timer" component={NotificationScreen} />
         <Tab.Screen name="Hobbies" component={props => <HomeScreen {...props} extraData={user} /> }/>
       </Tab.Navigator>

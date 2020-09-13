@@ -6,12 +6,10 @@ import {
     LineChart,
   } from "react-native-chart-kit";
 
-
-
 async function getData(user_id) {
 
-    var data = [];
-    var time = [];
+    var time = []
+    var data = []
   
     var snapshot = await firebase.firestore()
       .collection('data')
@@ -30,6 +28,7 @@ async function getData(user_id) {
     alert(data)
   }
 
+var user_id = ''
 
 export default function MessageScreen({navigation}) {
 
@@ -38,7 +37,6 @@ export default function MessageScreen({navigation}) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr']
     const amount = [3, 7, 8, 9]
     const entityRef = firebase.firestore().collection('data')
-    var user_id = ''
     firebase.auth().onAuthStateChanged(function(user){
         if(user){
             entityRef
@@ -60,12 +58,13 @@ export default function MessageScreen({navigation}) {
                 }
             )
             user_id = user.uid
-            getData(user_id)
+            
         }else{
             user_id = ''
-
         }
     })
+
+    //getData(user_id)
 
     const onAddButtonPress = () => {
         if (entityText && entityText.length > 0) {
@@ -89,7 +88,7 @@ export default function MessageScreen({navigation}) {
                     alert(error)
                 });
         }
-    }  
+    } 
 
     return (
         <View style={styles.container}>
