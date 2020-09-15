@@ -7,16 +7,18 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'  
       },
-    title: {
-
-    },
     logo: {
         flex: 1,
-        height: 120,
-        width: 120,
+        height: 200,
+        width: 200,
         alignSelf: "center",
         margin: 30
     },
+    instructions : {
+        backgroundColor: '#FFFCE0',
+        fontSize: 30, 
+        alignSelf: "center",
+      },
     input: {
         height: 48,
         borderRadius: 5,

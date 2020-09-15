@@ -48,6 +48,7 @@ export default function LoginScreen({navigation}) {
                     style={styles.logo}
                     source={require('../../../assets/icon.png')}
                 />
+                <Text style={styles.instructions}>Login</Text>
                 <TextInput
                     style={styles.input}
                     placeholder='E-mail'

@@ -55,6 +55,7 @@ export default function RegistrationScreen({navigation}) {
                     style={styles.logo}
                     source={require('../../../assets/icon.png')}
                 />
+                <Text style={styles.instructions}>Register</Text>
                 <TextInput
                     style={styles.input}
                     placeholder='Full Name'
